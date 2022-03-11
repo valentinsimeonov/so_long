@@ -1,6 +1,6 @@
 NAME = so_long
 
-SRC = so_long.c utils.c
+SRC = so_long.c utils.c get_next_line.c 
 
 OBJ = $(SRC:.c=.o)
 
