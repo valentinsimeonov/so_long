@@ -2,17 +2,7 @@
 
 
 ====  Steps Taken in building the Program:  =====
-<br />
 
-1. Error Check/Validity(int, Duplicates, etc) for The Arguments from STDIN
-2. Map Checker
-<br />
-
-
-
-
-=== TODO  ====
- 
 1. Create STDIN Error Checker
 DONE	- must have 2 STDIN Arguments, ./so_long and the Map with Extension .ber
 
