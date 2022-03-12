@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:25:08 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/11 17:57:18 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/12 16:30:09 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,36 @@ typedef struct s_list
 int	is_map(char *argv);
 int	check_map(t_list **lines);
 
+// int	check_if_map_rectangle(t_list **lines, int lines_count);  /// TO DELETE
+int	check_P_E_C_in_map(t_list **lines);
+int	is_length_of_lines_the_same(t_list **lines);
+int	is_first_and_last_line_is_one(t_list **lines);
+
+
 /* Utils */
 int	ft_strlen_line(t_list **lines);
 int	ft_strlen_line_1(char *s);
+
+int	ft_atoi(const char *str);
+
+int	ft_strchr_first_line(const char *s, char c);
+int	ft_strchr_second_line(const char *s, char c);
+int	is_first_char_and_last_char_one(t_list **lines);
+int	is_only__P_C_E_1_0_in_map(t_list **lines);
+
+
+
+/* Linked Lists Utils */
 void	ft_lstadd_back(t_list **lst, t_list *new);
 t_list	*create_element(char *character);
-
+t_list	*list_init(int fd_map);
+int	list_element_count(t_list **lines);
 
 
 
 
 /* TO DELETE*/
-void	print_stack(t_list **stack);
+void	print_list(t_list **stack);
 
 
 
