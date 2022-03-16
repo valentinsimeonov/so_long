@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 16:50:16 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/12 16:08:45 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/14 17:26:12 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,3 +118,20 @@ int	ft_atoi(const char *str)
 	}
 	return (num * sign);
 }
+
+// void	ft_lstclear(t_list **lst, void (*del)(void*))
+// {
+// 	t_list	*current;
+// 	t_list	*temp;
+
+// 	current = *lst;
+// 	while (current != NULL && del)
+// 	{
+// 		temp = current->next;
+// 		del(current->content);
+// 		free(current);
+// 		current = temp;
+// 	}
+// 	*lst = NULL;
+// }
+

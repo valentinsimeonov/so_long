@@ -6,49 +6,184 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 12:25:28 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/12 19:38:04 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/16 20:35:25 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+# include "mlx/mlx.h"
 
 int	main(int argc, char **argv)
 {
 	
 	int		fd_map;
 	int	lines_count;
-	// t_long	*arch;
-	t_list	*lines;
+	t_long	arch;
 	// t_data	*img;
+	// t_list	*lines;
 
 	fd_map = open(argv[1], O_RDONLY);
 	if (argc != 2 || !is_map(argv[1]) || fd_map <= 0)
 		write(1, "Error, either Invalid Argument or Invalid Map", 44);
-		
-	lines = list_init(fd_map);
-	print_list(&lines);
-	lines_count = list_element_count(&lines);
-	if (!check_P_E_C_in_map(&lines) || !is_length_of_lines_the_same(&lines) || \
-	!is_first_and_last_line_is_one(&lines) || !is_first_char_and_last_char_one(&lines) \
-	|| !is_only__P_C_E_1_0_in_map(&lines))
-	{
-		write(1, "Error, Map is Wack!", 19);
-	}
+	arch.lines = list_init(fd_map);
+	// print_list(&lines);
+	lines_count = list_element_count(&arch.lines);
 	
-	// /* Initialising the MLX Library and Creting the Game Window */
-	// long.mlx = mlx_init();
-	// long.mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello World");
-	// long.img->img = mlx_new_image(mlx, 1920, 1080);
-	// // img = mlx_new_image(mlx, 300, 150);
-	// mlx_loop(mlx);
-	// long.img->addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_lenght, &img.endian);
+	if (!check_P_E_C_in_map(&arch.lines) || !is_length_of_lines_the_same(&arch.lines) || \
+	!is_first_and_last_line_is_one(&arch.lines) || !is_first_char_and_last_char_one(&arch.lines) \
+	|| !is_only__P_C_E_1_0_in_map(&arch.lines))
+		write(1, "Error, Map is Wack!", 19);
+
+
+	// /* Initialising the MLX Library and Creating the Game Window */
+	arch.img = malloc(sizeof(t_data));
+	arch.mlx = mlx_init();
+	arch.mlx_win = mlx_new_window(arch.mlx, ft_strlen_line_1(arch.lines->line) * 48, \
+	list_element_count(&arch.lines) * 48, "so_long");
+	create_visual_map(&arch, &arch.lines, arch.img);
+	mlx_key_hook(arch.mlx_win, key_hook, &arch);
+
+	// mlx_hook(arch.mlx_win, ON_DESTROY, 0, )
+	mlx_loop(arch.mlx);
+	
 }
 
+int	key_hook(int keycode, t_long *arch, t_list	**lines, t_data *img)
+{
+	if (keycode == UP || keycode == DOWN \
+	|| keycode == LEFT || keycode == RIGHT)
+	{
+		player_position(arch, lines, keycode);
+		create_visual_map(arch, lines, img);
+	}
+	if (keycode == ESC)
+		finish(arch);
+	return (0);
+}
 
+void	player_position(t_long *arch, t_list **lines, int keycode)
+{
+	t_list	*temp;
+	char	*next;
 
+	temp = get_position(arch, *lines);
+	next = next_move(temp, arch, keycode);
+	if (*next != '1')
+	{
+		if (*next == 'C' || *next == '0')
+		{
+			if (*next == 'C')
+				arch->collected++;
+			arch->moves++;
+		}
+		else if (*next == 'E' && arch->collected == arch->collect)
+		{
+			arch->moves++;
+			finish(arch);
+		}
+		else if (*next == 'E')
+			return ;
+		*next = 'P';
+		*(char *)(temp->next->line + arch->pos_x) = '0';	
+	}
+	return ;
+}
 
+t_list	*get_position(t_long *arch, t_list *lines)
+{
+	t_list	*temp;
+	
+	temp = lines->next;
+	print_list(&lines);
+	while (temp)
+	{
+		arch->pos_x = 0;
+		while (*(char *)(temp->line + arch->pos_x) \
+		&& *(char *)(temp->line + arch->pos_x) != 'P' \
+		&& *(char *)(temp->line + arch->pos_x) != '\n' )
+			arch->pos_x++;
+		if (*(char *)(temp->line + arch->pos_x) == 'P')
+			break;
+		lines = temp;
+		temp = temp->next;
+	}
+	return (lines);
+}
 
+char	*next_move(t_list *temp, t_long *arch, int keycode)
+{
+	char	*next;
 
+	next = (char *)temp->line;
+	if (keycode == UP)
+		next = (char *)temp->line + arch->pos_x;
+	if (keycode == DOWN)
+		next = (char *)temp->next->next->line + arch->pos_x;
+	if (keycode == LEFT)
+		next = (char *)temp->next->line + arch->pos_x - 1;
+	if (keycode == RIGHT)
+		next = (char *)temp->next->line + arch->pos_x + 1;
+	return (next);
+}
+
+int	finish(t_long *arch)
+{
+	// ft_lstclear(lines, free);
+	mlx_destroy_window(arch->mlx, arch->mlx_win);
+	write(1, "You have Closed the Game!\n", 26);
+	exit(0);
+}
+
+void	create_visual_map(t_long *arch, t_list	**lines, t_data *img)
+{
+	t_list	*temp;
+	char	*line;
+	int		i;
+
+	i = 0;
+	img->point_x = 0;
+	img->point_y = 0;
+	temp = *lines;
+	while (temp)
+	{
+		line = temp->line;
+		while (line[i] && line[i] != '\n')
+		{
+			load_assests(arch, img, line[i], img->point_x, img->point_y);
+			i++;
+			img->point_x += 48;
+		}
+		temp = temp->next;
+		img->point_x = 0;
+		img->point_y += 48;
+		i = 0;
+	}
+}
+
+void	load_assests(t_long	*arch, t_data *img, char c, int x, int y)
+{
+	if (c == '1')
+		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/red_walls.xpm", &img->size_x, &img->size_y);
+	else if (c == 'P')
+	{
+		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/space.xpm", &img->size_x, &img->size_y);
+		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/sun_resized.xpm", &img->size_x, &img->size_y);
+	}
+	else if (c == 'E')
+		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/exit_x.xpm", &img->size_x, &img->size_y);
+	else if (c == 'C')
+	{
+		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/space.xpm", &img->size_x, &img->size_y);
+		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/heart.xpm", &img->size_x, &img->size_y);
+	}
+	else
+		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/space.xpm", &img->size_x, &img->size_y);
+	mlx_put_image_to_window(arch->mlx, arch->mlx_win, img->img, x, y);
+	// printf("%p\n", img->img);
+	// printf("%p\n", arch->mlx);
+	mlx_destroy_image(arch->mlx, img->img);
+}
+ 
 
 
 ////////////////////////////////       ALL   GOOD    /////////////////////////////////
@@ -184,7 +319,7 @@ int	list_element_count(t_list **lines)
 	t_list	*temp;
 
 	temp = *lines;
-	lines_count = 0;
+	lines_count = 1;
 	while (temp->next != NULL)
 	{
 		lines_count++;

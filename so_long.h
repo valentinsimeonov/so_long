@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:25:08 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/12 16:30:09 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/16 20:30:52 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,25 @@
 #  define BUFFER_SIZE 1
 # endif
 
-typedef struct s_long
-{
-	void	*mlx;
-	void	*mlx_win;
-	// t_list	*lines;
-	// t_data	*img;
-}			t_long;
+# define UP 13
+# define DOWN 1
+# define LEFT 0
+# define RIGHT 2
+# define ESC 53
+
+
 
 typedef struct s_data
 {
 	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_lenght;
-	int		endian;
+	int		size_y;
+	int		size_x;
+	int		point_x;
+	int		point_y;
+	// char	*addr;
+	// int		bits_per_pixel;
+	// int		line_lenght;
+	// int		endian;
 }			t_data;
 
 typedef struct s_list
@@ -45,6 +49,21 @@ typedef struct s_list
 	char	*line;
 	struct	s_list *next;
 }			t_list;
+
+typedef struct s_long
+{
+	void	*mlx;
+	void	*mlx_win;
+	int		moves;
+	int		collect;
+	int		collected;
+	int		player;
+	int		exit;
+	int		pos_x;
+	// int		just_for_init;
+	t_list	*lines;
+	t_data	*img;
+}			t_long;
 
 /* Input Checkers */
 int	is_map(char *argv);
@@ -74,6 +93,20 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 t_list	*create_element(char *character);
 t_list	*list_init(int fd_map);
 int	list_element_count(t_list **lines);
+void	ft_lstclear(t_list **lst, void (*del)(void*));
+
+/* Creating the Visual Map */
+void	load_assests(t_long	*arch, t_data *img, char c, int x, int y);
+void	create_visual_map(t_long *arch, t_list	**lines, t_data *img);
+
+/* Keyboard Hooks */
+int	key_hook(int keycode, t_long *arch, t_list	**lines, t_data *img);
+t_list	*get_position(t_long *arch, t_list *lines);
+char	*next_move(t_list *temp, t_long *arch, int keycode);
+void	player_position(t_long *arch, t_list **lines, int keycode);
+
+/*  */
+int	finish(t_long *arch);
 
 
 
