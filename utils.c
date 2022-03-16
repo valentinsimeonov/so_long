@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 16:50:16 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/14 17:26:12 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/16 21:40:48 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,74 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (num * sign);
+}
+
+static int	ft_count_int_lenght(int n)
+{
+	int		i;
+
+	i = 1;
+	if (n < 0)
+	{
+		n *= -1;
+		i++;
+	}
+	while (n >= 10)
+	{
+		n /= 10;
+		i++;
+	}
+	return (i);
+}
+
+char	*ft_itoa(int n)
+{
+	char	*temp;
+	char	*str;
+	size_t	len;
+
+	if (n == -2147483648)
+		return (ft_strdup("-2147483648"));
+	len = ft_count_int_lenght(n);
+	temp = ft_calloc(sizeof(char), (len + 1));
+	if (!temp)
+		return (NULL);
+	str = temp;
+	if (n < 0)
+	{
+		*temp = '-';
+		n *= -1;
+	}
+	temp += len;
+	while (n >= 10)
+	{
+		temp--;
+		*temp = ((n % 10) + '0');
+		n /= 10;
+	}
+	*(--temp) = (n % 10) + '0';
+	return (str);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*p;
+	int		len;
+	int		i;
+
+	len = 0;
+	i = 0;
+	len = ft_strlen(s1);
+	p = (char *)malloc((len + 1) * sizeof(char));
+	if (!p)
+		return (NULL);
+	while (i < len)
+	{
+		*(p + i) = *(s1 + i);
+		i++;
+	}
+	*(p + i) = '\0';
+	return (p);
 }
 
 // void	ft_lstclear(t_list **lst, void (*del)(void*))

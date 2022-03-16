@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:25:08 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/16 20:30:52 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/16 22:33:46 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,6 @@ typedef struct s_data
 	int		size_x;
 	int		point_x;
 	int		point_y;
-	// char	*addr;
-	// int		bits_per_pixel;
-	// int		line_lenght;
-	// int		endian;
 }			t_data;
 
 typedef struct s_list
@@ -60,32 +56,33 @@ typedef struct s_long
 	int		player;
 	int		exit;
 	int		pos_x;
-	// int		just_for_init;
 	t_list	*lines;
-	t_data	*img;
+	t_data	img;
 }			t_long;
+
+enum {
+	ON_DESTROY = 17
+};
 
 /* Input Checkers */
 int	is_map(char *argv);
 int	check_map(t_list **lines);
 
-// int	check_if_map_rectangle(t_list **lines, int lines_count);  /// TO DELETE
-int	check_P_E_C_in_map(t_list **lines);
-int	is_length_of_lines_the_same(t_list **lines);
-int	is_first_and_last_line_is_one(t_list **lines);
-
-
-/* Utils */
-int	ft_strlen_line(t_list **lines);
-int	ft_strlen_line_1(char *s);
-
-int	ft_atoi(const char *str);
-
+/* Map Checkers */
 int	ft_strchr_first_line(const char *s, char c);
 int	ft_strchr_second_line(const char *s, char c);
 int	is_first_char_and_last_char_one(t_list **lines);
 int	is_only__P_C_E_1_0_in_map(t_list **lines);
+int	check_P_E_C_in_map(t_long *arch, t_list	**lines);
+int	is_length_of_lines_the_same(t_list **lines);
+int	is_first_and_last_line_is_one(t_list **lines);
 
+/* Utils */
+int	ft_strlen_line(t_list **lines);
+int	ft_strlen_line_1(char *s);
+int	ft_atoi(const char *str);
+char	*ft_itoa(int n);
+char	*ft_strdup(const char *s1);
 
 
 /* Linked Lists Utils */
@@ -93,20 +90,23 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 t_list	*create_element(char *character);
 t_list	*list_init(int fd_map);
 int	list_element_count(t_list **lines);
-void	ft_lstclear(t_list **lst, void (*del)(void*));
+// void	ft_lstclear(t_list **lst, void (*del)(void*));
+void	free_list(t_list **lines);
 
 /* Creating the Visual Map */
-void	load_assests(t_long	*arch, t_data *img, char c, int x, int y);
-void	create_visual_map(t_long *arch, t_list	**lines, t_data *img);
+void	load_assests(t_long	*arch, char c, int x, int y);
+void	create_visual_map(t_long *arch);
 
 /* Keyboard Hooks */
-int	key_hook(int keycode, t_long *arch, t_list	**lines, t_data *img);
+int	key_hook(int keycode, t_long *arch);
 t_list	*get_position(t_long *arch, t_list *lines);
 char	*next_move(t_list *temp, t_long *arch, int keycode);
 void	player_position(t_long *arch, t_list **lines, int keycode);
 
 /*  */
 int	finish(t_long *arch);
+int	loop(t_long *arch);
+
 
 
 

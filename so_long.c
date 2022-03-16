@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 12:25:28 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/16 20:35:25 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/16 22:38:18 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,33 +28,53 @@ int	main(int argc, char **argv)
 	arch.lines = list_init(fd_map);
 	// print_list(&lines);
 	lines_count = list_element_count(&arch.lines);
-	
-	if (!check_P_E_C_in_map(&arch.lines) || !is_length_of_lines_the_same(&arch.lines) || \
+	if (!check_P_E_C_in_map(&arch, &arch.lines) || !is_length_of_lines_the_same(&arch.lines) || \
 	!is_first_and_last_line_is_one(&arch.lines) || !is_first_char_and_last_char_one(&arch.lines) \
 	|| !is_only__P_C_E_1_0_in_map(&arch.lines))
 		write(1, "Error, Map is Wack!", 19);
-
-
-	// /* Initialising the MLX Library and Creating the Game Window */
-	arch.img = malloc(sizeof(t_data));
+	/* Initialising the MLX Library and Creating the Game Window */
+	arch.moves = 0;
+	arch.collected = 0;
 	arch.mlx = mlx_init();
 	arch.mlx_win = mlx_new_window(arch.mlx, ft_strlen_line_1(arch.lines->line) * 48, \
 	list_element_count(&arch.lines) * 48, "so_long");
-	create_visual_map(&arch, &arch.lines, arch.img);
+	create_visual_map(&arch);
 	mlx_key_hook(arch.mlx_win, key_hook, &arch);
-
-	// mlx_hook(arch.mlx_win, ON_DESTROY, 0, )
+	mlx_hook(arch.mlx_win, ON_DESTROY, 0, finish, &arch);
+	mlx_loop_hook(arch.mlx, loop, &arch);
 	mlx_loop(arch.mlx);
-	
 }
 
-int	key_hook(int keycode, t_long *arch, t_list	**lines, t_data *img)
+void	free_list(t_list **lines)
+{
+    t_list    *tmp1;
+    t_list    *tmp2;
+    
+    tmp1 = *lines;
+    while (tmp1 != NULL)
+    {
+        tmp2 = tmp1->next;
+        free(tmp1);
+        tmp1 = tmp2;
+    }
+}
+
+int	loop(t_long *arch)
+{
+	char	*moves;
+	
+	moves = ft_itoa(arch->moves);
+	mlx_string_put(arch->mlx, arch->mlx_win, 30, 30, 0xffff00, moves);
+	return (0);
+}
+
+int	key_hook(int keycode, t_long *arch)
 {
 	if (keycode == UP || keycode == DOWN \
 	|| keycode == LEFT || keycode == RIGHT)
 	{
-		player_position(arch, lines, keycode);
-		create_visual_map(arch, lines, img);
+		player_position(arch, &arch->lines, keycode);
+		create_visual_map(arch);
 	}
 	if (keycode == ESC)
 		finish(arch);
@@ -94,7 +114,7 @@ t_list	*get_position(t_long *arch, t_list *lines)
 	t_list	*temp;
 	
 	temp = lines->next;
-	print_list(&lines);
+	// print_list(&lines);
 	while (temp)
 	{
 		arch->pos_x = 0;
@@ -128,60 +148,58 @@ char	*next_move(t_list *temp, t_long *arch, int keycode)
 
 int	finish(t_long *arch)
 {
-	// ft_lstclear(lines, free);
+	free_list(&arch->lines);
 	mlx_destroy_window(arch->mlx, arch->mlx_win);
 	write(1, "You have Closed the Game!\n", 26);
 	exit(0);
 }
 
-void	create_visual_map(t_long *arch, t_list	**lines, t_data *img)
+void	create_visual_map(t_long *arch)
 {
 	t_list	*temp;
 	char	*line;
 	int		i;
 
 	i = 0;
-	img->point_x = 0;
-	img->point_y = 0;
-	temp = *lines;
+	arch->img.point_x = 0;
+	arch->img.point_y = 0;
+	temp = arch->lines;
 	while (temp)
 	{
 		line = temp->line;
 		while (line[i] && line[i] != '\n')
 		{
-			load_assests(arch, img, line[i], img->point_x, img->point_y);
+			load_assests(arch, line[i], arch->img.point_x, arch->img.point_y);
 			i++;
-			img->point_x += 48;
+			arch->img.point_x += 48;
 		}
 		temp = temp->next;
-		img->point_x = 0;
-		img->point_y += 48;
+		arch->img.point_x = 0;
+		arch->img.point_y += 48;
 		i = 0;
 	}
 }
 
-void	load_assests(t_long	*arch, t_data *img, char c, int x, int y)
+void	load_assests(t_long	*arch, char c, int x, int y)
 {
 	if (c == '1')
-		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/red_walls.xpm", &img->size_x, &img->size_y);
+		arch->img.img = mlx_xpm_file_to_image(arch->mlx, "./data/red_walls.xpm", &arch->img.size_x, &arch->img.size_y);
 	else if (c == 'P')
 	{
-		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/space.xpm", &img->size_x, &img->size_y);
-		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/sun_resized.xpm", &img->size_x, &img->size_y);
+		arch->img.img = mlx_xpm_file_to_image(arch->mlx, "./data/space.xpm", &arch->img.size_x, &arch->img.size_y);
+		arch->img.img = mlx_xpm_file_to_image(arch->mlx, "./data/sun_resized.xpm", &arch->img.size_x, &arch->img.size_y);
 	}
 	else if (c == 'E')
-		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/exit_x.xpm", &img->size_x, &img->size_y);
+		arch->img.img = mlx_xpm_file_to_image(arch->mlx, "./data/exit_x.xpm", &arch->img.size_x, &arch->img.size_y);
 	else if (c == 'C')
 	{
-		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/space.xpm", &img->size_x, &img->size_y);
-		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/heart.xpm", &img->size_x, &img->size_y);
+		arch->img.img = mlx_xpm_file_to_image(arch->mlx, "./data/space.xpm", &arch->img.size_x, &arch->img.size_y);
+		arch->img.img = mlx_xpm_file_to_image(arch->mlx, "./data/heart.xpm", &arch->img.size_x, &arch->img.size_y);
 	}
 	else
-		img->img = mlx_xpm_file_to_image(arch->mlx, "./data/space.xpm", &img->size_x, &img->size_y);
-	mlx_put_image_to_window(arch->mlx, arch->mlx_win, img->img, x, y);
-	// printf("%p\n", img->img);
-	// printf("%p\n", arch->mlx);
-	mlx_destroy_image(arch->mlx, img->img);
+		arch->img.img = mlx_xpm_file_to_image(arch->mlx, "./data/space.xpm", &arch->img.size_x, &arch->img.size_y);
+	mlx_put_image_to_window(arch->mlx, arch->mlx_win, arch->img.img, x, y);
+	mlx_destroy_image(arch->mlx, arch->img.img);
 }
  
 
@@ -192,14 +210,14 @@ void	load_assests(t_long	*arch, t_data *img, char c, int x, int y)
 
          //// Checkers   //////
 /* Checking if P, E, C is in Map */
-int	check_P_E_C_in_map(t_list **lines)
+int	check_P_E_C_in_map(t_long *arch, t_list	**lines)
 {
 	t_list	*temp;
 	int		i;
 	int		len_line;
 	int		flag[255];
 	
-	temp = (*lines);
+	temp = *lines;
 	len_line = ft_strlen_line(lines);
 	i = 0;
 	while (i > 255)
@@ -210,11 +228,20 @@ int	check_P_E_C_in_map(t_list **lines)
 	while (temp->next != NULL)
 	{
 		if (ft_strchr(temp->line, 'P'))
+		{	
 			flag[80] = 1;
+			arch->player++;
+		}
 		if (ft_strchr(temp->line, 'E'))
+		{	
 			flag[69] = 1;
+			arch->exit++;
+		}
 		if (ft_strchr(temp->line, 'C'))
+		{
 			flag[67] = 1;
+			arch->collect++;
+		}
 		temp = temp->next;
 	}
 	if (flag[80] != 1 || flag[69] != 1 || flag[67] != 1)
