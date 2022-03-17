@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:25:08 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/16 22:33:46 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/17 16:59:43 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@
 # define RIGHT 2
 # define ESC 53
 
-
+enum {
+	ON_DESTROY = 17
+};
 
 typedef struct s_data
 {
@@ -59,10 +61,6 @@ typedef struct s_long
 	t_list	*lines;
 	t_data	img;
 }			t_long;
-
-enum {
-	ON_DESTROY = 17
-};
 
 /* Input Checkers */
 int	is_map(char *argv);
@@ -99,9 +97,9 @@ void	create_visual_map(t_long *arch);
 
 /* Keyboard Hooks */
 int	key_hook(int keycode, t_long *arch);
-t_list	*get_position(t_long *arch, t_list *lines);
-char	*next_move(t_list *temp, t_long *arch, int keycode);
-void	player_position(t_long *arch, t_list **lines, int keycode);
+t_list	*player_position(t_long *arch, t_list *lines);
+char	*player_next_move(t_list *temp, t_long *arch, int keycode);
+void	p_position_and_counting_objects(t_long *arch, int keycode);
 
 /*  */
 int	finish(t_long *arch);

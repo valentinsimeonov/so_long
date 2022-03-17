@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 16:50:16 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/16 21:40:48 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/17 14:07:56 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,26 +31,6 @@ int	ft_strlen_line_1(char *s)
 		i++;
 	return (i);
 }
-
-// char	*ft_strchr(const char *s, int c)
-// {
-// 	int		i;
-// 	char	*str;
-// 	int		len;
-
-// 	i = 0;
-// 	str = (char *)s;
-// 	len = ft_strlen(s);
-// 	while (i <= len)
-// 	{
-// 		if (*(str + i) == c)
-// 			return (str + i);
-// 		i++;
-// 	}
-// 	if (c == 0)
-// 		return (str + len + 1);
-// 	return (NULL);
-// }
 
 int	ft_strchr_first_line(const char *s, char c)
 {

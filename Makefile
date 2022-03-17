@@ -1,6 +1,6 @@
 NAME = so_long
 
-SRC = so_long.c utils.c get_next_line.c 
+SRC = so_long.c utils.c get_next_line.c checkers.c create_destroy_map.c hooks_and_rules.c utils_linked_lists.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -15,7 +15,7 @@ all: $(NAME)
 $(%.o): $(%.c)
 	$(CC) $(FLAGS) -Imlx -c $< -o $@
 
-$(NAME): $(OBJ) 
+$(NAME): $(OBJ)
 	$(CC) $(OBJ) -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
 clean:
