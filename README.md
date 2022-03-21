@@ -18,5 +18,5 @@ DONE 8. Create the Rules
 DONE 9. Free Allocated Memmory
 
 
-TO DO
+DONE
 Link Get_next_line through Makefile
