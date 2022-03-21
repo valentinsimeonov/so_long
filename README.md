@@ -9,10 +9,14 @@ DONE 	- check that the Map is a Rectangle
 DONE 	- check that a P, C, and E exists
 DONE 	- check that there are Walls (1s) surrounding the Map
 DONE 	- check that there are not any other Characters except P,C,E, 1 and 0;
-3. Initialize MLX, Creating the Window
-		- 
-4. Designing and Finding the Images
-5. Converting Images to .xml
-6. Display the Pixel Art on the corresponding Map Coordinates
-7. Mapping the Keys to the Game
-8. Free Allocated Memmory
+DONE 3. Initialize MLX, Creating the Window
+DONE 4. Designing and Finding the Images
+DONE 5. Converting Images to .xml
+DONE 6. Display the Pixel Art on the corresponding Map Coordinates
+DONE 7. Mapping the Keys to the Game
+DONE 8. Create the Rules
+DONE 9. Free Allocated Memmory
+
+
+TO DO
+Link Get_next_line through Makefile

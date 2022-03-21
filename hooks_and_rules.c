@@ -6,13 +6,14 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 14:02:28 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/17 17:02:47 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/21 15:06:13 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-/* Determining where the Key Pressed Takes the Player and what Action it Determines */
+/* Determining where the Key Pressed Takes the Player
+and what Action it Determines */
 int	key_hook(int keycode, t_long *arch)
 {
 	if (keycode == UP || keycode == DOWN \
@@ -26,7 +27,8 @@ int	key_hook(int keycode, t_long *arch)
 	return (0);
 }
 
-/* Using Player's Position and Next Move to Determine what Happens to the Objects in the Map and Finishes the Game */
+/* Using Player's Position and Next Move to Determine
+what Happens to the Objects in the Map and Finishes the Game */
 void	p_position_and_counting_objects(t_long *arch, int keycode)
 {
 	t_list	*temp;
@@ -44,16 +46,13 @@ void	p_position_and_counting_objects(t_long *arch, int keycode)
 		}
 		else if (*next == 'E' && arch->collected == arch->collect)
 		{
-			printf("%d\n", arch->collect);
-			printf("%d\n", arch->collected);
 			arch->moves++;
 			finish(arch);
 		}
 		else if (*next == 'E')
-			// finish(arch);
 			return ;
 		*next = 'P';
-		*(char *)(temp->next->line + arch->pos_x) = '0';	
+		*(char *)(temp->next->line + arch->pos_x) = '0';
 	}
 	return ;
 }
@@ -62,9 +61,8 @@ void	p_position_and_counting_objects(t_long *arch, int keycode)
 t_list	*player_position(t_long *arch, t_list *lines)
 {
 	t_list	*temp;
-	
+
 	temp = lines->next;
-	// print_list(&lines);
 	while (temp)
 	{
 		arch->pos_x = 0;
@@ -73,7 +71,7 @@ t_list	*player_position(t_long *arch, t_list *lines)
 		&& *(char *)(temp->line + arch->pos_x) != '\n' )
 			arch->pos_x++;
 		if (*(char *)(temp->line + arch->pos_x) == 'P')
-			break;
+			break ;
 		lines = temp;
 		temp = temp->next;
 	}

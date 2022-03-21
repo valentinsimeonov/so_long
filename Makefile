@@ -1,6 +1,6 @@
 NAME = so_long
 
-SRC = so_long.c utils.c get_next_line.c checkers.c create_destroy_map.c hooks_and_rules.c utils_linked_lists.c
+SRC = checkers.c checkers2.c create_destroy_map.c hooks_and_rules.c so_long.c utils_linked_lists.c utils.c 
 
 OBJ = $(SRC:.c=.o)
 
@@ -16,14 +16,16 @@ $(%.o): $(%.c)
 	$(CC) $(FLAGS) -Imlx -c $< -o $@
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+	make -C libft/
+	$(CC) $(OBJ) libft/libft.a -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
 clean:
 	$(RM) *.o
-	make clean -C mlx/
+	make clean -C libft/
 
 fclean: clean
 	$(RM) $(NAME)
+	make fclean -C libft/
 
 re: fclean all
 

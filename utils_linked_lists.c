@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 13:45:59 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/17 13:54:02 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/21 15:23:54 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* Counting the Lines (Elements) in Map (Linked List) */
 int	list_element_count(t_list **lines)
 {
-	int	lines_count;
+	int		lines_count;
 	t_list	*temp;
 
 	temp = *lines;
@@ -58,7 +58,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 			temp = temp->next;
 		temp->next = new;
 	}
-	else 
+	else
 		*lst = new;
 }
 
@@ -78,14 +78,14 @@ t_list	*create_element(char *character)
 /* Freeing the Allocated Memory for Linked List */
 void	free_list(t_list **lines)
 {
-    t_list    *tmp1;
-    t_list    *tmp2;
-    
-    tmp1 = *lines;
-    while (tmp1 != NULL)
-    {
-        tmp2 = tmp1->next;
-        free(tmp1);
-        tmp1 = tmp2;
-    }
+	t_list		*tmp1;
+	t_list		*tmp2;
+
+	tmp1 = *lines;
+	while (tmp1 != NULL)
+	{
+		tmp2 = tmp1->next;
+		free(tmp1);
+		tmp1 = tmp2;
+	}
 }
