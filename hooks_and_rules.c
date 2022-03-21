@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 14:02:28 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/21 15:06:13 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/21 19:30:04 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,13 @@ char	*player_next_move(t_list *temp, t_long *arch, int keycode)
 	if (keycode == RIGHT)
 		next = (char *)temp->next->line + arch->pos_x + 1;
 	return (next);
+}
+
+int	loop(t_long *arch)
+{
+	char	*moves;
+
+	moves = ft_itoa(arch->moves);
+	mlx_string_put(arch->mlx, arch->mlx_win, 30, 30, 0xffff00, moves);
+	return (0);
 }

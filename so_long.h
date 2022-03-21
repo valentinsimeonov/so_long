@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 13:25:08 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/21 15:34:23 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/21 19:32:11 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ t_list	*player_position(t_long *arch, t_list *lines);
 char	*player_next_move(t_list *temp, t_long *arch, int keycode);
 void	p_position_and_counting_objects(t_long *arch, int keycode);
 int		finish(t_long *arch);
+int		error(t_long *arch);
+int		error_arg();
 int		loop(t_long *arch);
 
 #endif

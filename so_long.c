@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 12:25:28 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/21 15:44:13 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/21 19:33:24 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,17 @@ int	main(int argc, char **argv)
 
 	fd_map = open(argv[1], O_RDONLY);
 	if (argc != 2 || !is_map(argv[1]) || fd_map <= 0)
-		write(1, "Error, either Invalid Argument or Invalid Map", 44);
+		error_arg();
 	arch.lines = list_init(fd_map);
 	lines_count = list_element_count(&arch.lines);
 	arch.moves = 0;
 	arch.collected = 0;
 	arch.collect = 0;
+	arch.player = 0;
 	if (!check_p_e_c_in_map(&arch, &arch.lines) || !is_length(&arch.lines) || \
 	!is_first_last_line(&arch.lines) || !is_first_last_char(&arch.lines) \
 	|| !is_p_c_e_1_0(&arch.lines))
-		write(1, "Error, Map is Wack!", 19);
+		error(&arch);
 	arch.mlx = mlx_init();
 	arch.mlx_win = mlx_new_window(arch.mlx, ft_strlen_line_1(arch.lines->line) \
 	* 48, list_element_count(&arch.lines) * 48, "so_long");

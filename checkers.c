@@ -6,7 +6,7 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 13:44:38 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/21 15:42:19 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/21 18:50:47 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,24 @@ int	check_p_e_c_in_map(t_long *arch, t_list	**lines)
 {
 	t_list	*temp;
 	int		i;
-	int		len_line;
-	int		flag[255];
 
 	temp = *lines;
-	len_line = ft_strlen_line(lines);
-	i = 0;
-	while (i > 255)
-		flag[i++] = 0;
 	while (temp->next != NULL)
 	{
-		if (ft_strchr(temp->line, 'P'))
-		{	
-			flag[80] = 1;
-			arch->player++;
-		}
-		if (ft_strchr(temp->line, 'E'))
-		{	
-			flag[69] = 1;
-			arch->exit++;
-		}
-		if (ft_strchr(temp->line, 'C'))
+		i = 0;
+		while (temp->line[i] && temp->line[i] != '\n')
 		{
-			flag[67] = 1;
-			arch->collect++;
+			if (temp->line[i] == 'P')
+				arch->player++;
+			else if (temp->line[i] == 'E')
+				arch->exit++;
+			else if (temp->line[i] == 'C')
+				arch->collect++;
+			i++;
 		}
 		temp = temp->next;
 	}
-	if (flag[80] != 1 || flag[69] != 1 || flag[67] != 1)
+	if (arch->player == 0 || arch->exit == 0 || arch->collect == 0)
 		return (0);
 	return (1);
 }

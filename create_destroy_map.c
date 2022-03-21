@@ -6,20 +6,11 @@
 /*   By: vsimeono <vsimeono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 14:04:00 by vsimeono          #+#    #+#             */
-/*   Updated: 2022/03/21 15:30:16 by vsimeono         ###   ########.fr       */
+/*   Updated: 2022/03/21 19:32:04 by vsimeono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-int	loop(t_long *arch)
-{
-	char	*moves;
-
-	moves = ft_itoa(arch->moves);
-	mlx_string_put(arch->mlx, arch->mlx_win, 30, 30, 0xffff00, moves);
-	return (0);
-}
 
 /* Freeing the Allocated Memory for Linked List and for Graphical Interface */
 int	finish(t_long *arch)
@@ -27,6 +18,21 @@ int	finish(t_long *arch)
 	free_list(&arch->lines);
 	mlx_destroy_window(arch->mlx, arch->mlx_win);
 	write(1, "You have Closed the Game!\n", 26);
+	exit(0);
+}
+
+/* Returning Error Message, Freeing Memory, Terminating Game Window */
+int	error(t_long *arch)
+{
+	write(1, "Error,\nMap is Wack!", 19);
+	free_list(&arch->lines);
+	exit(0);
+}
+
+/* Returning Error Message, Freeing Memory, Terminating Game Window */
+int	error_arg()
+{
+	write(1, "Error,\neither Invalid Argument or Invalid Map", 44);
 	exit(0);
 }
 
